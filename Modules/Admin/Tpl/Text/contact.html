@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link style="text/css" rel="stylesheet" href="__ADMIN__/Css/index.css">
+<script type="text/javascript" src="__ADMIN__/Js/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	var $href	=	window.location.href;
+	$(".listtr  a").click(function(){
+		$rel	=	$(this).attr('rel');
+		$bools	=	$href.search("desc");
+		if( $bools	!==	-1 ){
+			window.location.href="__URL__/contact/sort/"+$rel+"/order/asc";
+		}else{
+			window.location.href="__URL__/contact/sort/"+$rel+"/order/desc";
+		} 
+	});
+	//如果是进行排序 
+	if(  $href.indexOf('order') !== -1 ){
+		//添加一个排序小标签.得到top.html传过来的区块名
+		$module_name	=	$(".module").val();
+		$href	=	window.location.href;
+		$textinfo	=	$href.split($module_name);
+		$textinfo1	=	$textinfo[1].split("/");	
+		//得到排序名和排序值
+		$order_type	=	$textinfo1[3];
+		$order_value=	$textinfo1[5];
+		$("."+$order_type).addClass($order_value); 
+	}
+});
+//筛选函数
+function filter(){
+	var search_name = $(".search_select").val();
+	var search_input = $(".search_input").val();
+	if( search_input == '' ){
+		alert('请输入查询关键字');
+	}else{
+		location="__URL__/contact/searchName/"+search_name+"/searchVal/"+search_input;
+	}
+}
+</script>
+</head>
+<body>
+<div id="wrap_body">
+	<!-- 包含公用头部 -->
+	<include file="Public:top" />
+
+	<div class="ma_content">
+		<div class="breadcrumb">
+        	<a href="{:U('Admin/Text/contact')}">首页</a>
+    	</div>
+    	<div class="box">
+    		<div class="heading">
+      			<h1><img alt="" src="__ADMIN__/Images/address.png">联系我</h1>
+      			<ul class="heading_ul">
+      				<a class="button" onclick="location='__URL__/add_contact'">新增</a>
+      				<a class="button" onclick="if(confirm('确认删除?')){ $('#form').submit(); }">删除</a>
+      			</ul>
+   		 	</div>
+   		 	<!-- end heading -->
+   		 	<div class="filter">
+   		 		<table>
+   		 			<tr class="filter_tr">
+   		 				<td>
+   		 					<select name="search_name" class="search_select">
+   		 						<option value="type" <php> if($_GET['searchName'] == 'type'){echo "selected='selected'";} </php> >联系方式</option>
+   		 						<option value="value" <php> if($_GET['searchName'] == 'value'){echo "selected='selected'";} </php> >联系值</option>
+   		 					</select>
+   		 				</td>
+   		 				<td>
+   		 					<input type="text" name="search_value" value="<php>echo $_GET['searchVal'];</php>" class="form_input search_input" />
+   		 				</td>
+   		 				<td>
+   		 					<input type="button" value="查找" name="search" class="button search_button" onclick="filter();"/>
+   		 				</td>
+   		 			</tr>
+   		 		</table>
+   		 	</div>
+   		 	<!-- end filter -->
+   		 	<form action="__URL__/del_contact" method="post" id="form">
+				<table class="list">
+					<thead>
+						<tr class="listtr">
+							<td width="1" style="text-align: center;">
+								<input type="checkbox" onclick="$('input[name*=\'selected\']').attr('checked', this.checked);">
+							</td>
+							<td width="20%" class="left">
+								<a rel="type" class="type">联系方式</a>
+							</td>
+							<td width="35%" class="left">
+								<a rel="value" class="value">联系值</a>
+							</td>
+							<td width="25%" class="left">
+								<a  rel="datetime" class="datetime">创建日期</a>
+							</td>
+							<td width="20%" class="center">管理</td>
+						</tr>
+					</thead>
+					<tbody>
+						<volist name="list" id="vo">
+							<tr>
+				                <td style="text-align: center;">       
+				              		<input type="checkbox" value="" name="selected[{$vo._id}]">
+				                </td>
+				                <td class="left">{$vo.type}</td>
+				                <td class="left">{$vo.value}</td>
+				                <td class="left">{$vo.datetime}</td>
+				                <td class="center">              
+				              	[ <a href="__URL__/edit_contact/_id/{$vo._id}">编辑</a> ]
+				               </td>
+				            </tr>
+						</volist>
+					</tbody>
+				</table>
+			</form>
+			<!-- end form -->
+			<div id="page">
+				每页显示{$Think.config.PAGESIZE}条记录&nbsp;|&nbsp;共{$show}
+			</div>
+			<!-- end page -->
+    	</div>
+	</div>
+	<!-- end ma_content -->
+	
+	<!-- 包含公用尾部 -->
+	<include file="Public:footer" />
+</div>
+</body>
+</html>

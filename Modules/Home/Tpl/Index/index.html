@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link type='text/css' rel='stylesheet' href='__HOME__/Css/index.css' >
+<script type='text/javascript' src='__HOME__/Js/jquery-1.7.min.js' ></script>
+<script type="text/javascript" src="__ADMIN__/Js/UIDialog.js"></script>
+<script type='text/javascript'>
+$(document).ready(function(){
+	//预览故事
+	$(".readmore").click(function(){
+		var _id		=	$(this).attr("rel");
+		//得到滚动条的原位置
+		var orgTop	=	$(document).scrollTop();
+		//点击的时候为了适应屏幕，我们先使滚动条到头部，等点击关闭在返回到原位置
+		$(document).scrollTop(0);
+		$.UIDialog({
+			callOnOpen:function(){
+				//弹出后，得到故事的id并通过ajax获得数据
+				$.post("__URL__/getstory",{'_id':_id},function(data){
+					data	=	eval("("+data+")");
+					var htmlCon	=	"<div class='readmore_title'>"+data['title']+"</div>"+
+									"<div class='readmore_content'>"+data['content']+"</div>"+
+									"<div class='readmore_datetime'>"+data['datetime']+"</div>";
+					//将内容插入进去
+					$(".ui-dialog-body").html(htmlCon);
+				})
+			},
+			title	:	'浏览故事',
+			content	:	"<div style='text-align:center;font-size:13px;'><img src='__HOME__/Images/045.gif'/>内容读取中······</div>",
+			callOnClose:function(){
+				$(document).scrollTop(orgTop);
+			},
+		})
+		//替换关闭文字为图片
+		$(".ui-close").html("<img src='__ADMIN__/Images/close.png' />"); 
+	});
+});
+</script>
+</head>
+<body>
+<div id="body_wrapper">
+	<div id="page">
+		<div class="page_left">
+			<img  src="__HOME__/Images/left_ornament.png">
+		</div>
+		<!-- end page_left -->
+		
+		<div class="page_right">
+			<img  src="__HOME__/Images/right_ornament.png">
+		</div>
+		<!-- end page_right -->
+		
+		<div class="page_content">
+			<div class='header'>
+				<div class='logo'>
+					Andy
+				</div>
+				<div class='clear'></div>
+				<ul class="nav">
+					<li class="first"><a href="{:U('Index/index')}">记录</a></li>
+					<li class="leaf"><a href="{:U('Index/photo')}">相册</a></li>
+					<li class="leaf"><a href="{:U('Index/profile')}">个人资料</a></li>
+					<li class="leaf"><a href="{:U('Index/contact')}">联系我</a></li>
+				</ul>
+			</div>
+			<!-- end header -->
+		
+			<div class="main">
+				<div class='slides'>
+					<div class="slide_img">
+						<img src='__HOME__/Images/01.jpg' width=649 height=360/>
+					</div>
+					<ul class="slide_index">
+						<li class="hover_slide_index">01</li>
+						<li>02</li>
+						<li>03</li>
+						<li>04</li>
+						<li>05</li>
+						<li>06</li>
+						<li>07</li>
+						<li>08</li>
+					</ul>
+				</div>
+				<!-- end slides -->
+				
+				<div class='content'>
+					<div class='left_content'>
+						<div class='title'>
+							<h1 class="title_text">记录</h1>
+						</div>
+						<div class='record'>
+							<div class="record_title">Andy和丁大头的记录</div>	
+							<div class="record_content"></div>
+						</div>
+					</div>
+					<!-- end left_content -->
+					<div class="right_content">
+						<div class='right_title'>
+							<h1>故事</h1>
+						</div>
+						
+						<div class='right_news'>
+							<ul>
+								<volist name="list" id="vo" key="k">
+									<div class='right_news_item'>
+										<li>{$k}.{$vo.title}</li>
+										<li style='text-indent:10px;'>{$vo.content|strip_tags|msubstr=###,0,40}······</li>
+										<li style='text-align:right;'>{$vo.datetime}</li>
+										<li style='text-align:right;'>
+											<a href="javascript:void(0)" class="readmore" rel="{$vo._id}">Read More</a>
+										</li>
+										<li><hr/></li>
+									</div>
+								</volist>
+							</ul>
+							<a href='__URL__/showall' class='show_all_news'>查看全部</a>
+						</div>
+						
+					</div>
+				</div>
+				<!-- end content -->
+			</div>
+			<!-- end main -->
+		</div>
+		<!-- end page_content -->
+	</div>
+	<div class="clear"></div>
+	
+	<include file="Public:footer" />
+</div>
+<!-- end body_wrapper -->
+</body>
+</html>

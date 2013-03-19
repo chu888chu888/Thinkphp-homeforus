@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link type='text/css' rel='stylesheet' href='__HOME__/Css/index.css' >
+<link type='text/css' rel='stylesheet' href='__HOME__/Css/tooltip/jquery.tooltip.css' >
+<script type='text/javascript' src='__HOME__/Js/jquery-1.7.min.js' ></script>
+<script type='text/javascript' src='__HOME__/Js/jquery.tooltip.js' ></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	//点击关闭按钮执行的函数
+	$(".closeul").click(function(){
+		var obj = $(this).parent().siblings("div").eq(1).attr("class");
+		toggleIcon("."+obj+">img","."+obj);
+	});
+	
+	//tooltips
+	 $(".pro_ul >li >a").tooltip();
+	
+	//点击赞赏，喜欢等按钮调用ajax处理等
+	$(".oper_word").click(function(){
+		var eva = $(this).attr('rel');
+		var numobj = $(this).next();
+		$.post("{:U('Home/Index/oper')}",{postData:true,type:eva},function(data){
+			if( data !== 'error' ){
+				numobj.html(data);
+			}else{
+				$(".error_eva").slideDown();
+			}
+		})
+	});
+	
+	$(document).click(function(){
+		$(".close").removeClass("close").addClass("open").attr("src","__HOME__/Images/add.png");
+		$(".pro_ul").slideUp();
+	});
+});
+
+//切换add和close的图片标签
+function toggleIcon(evt,sel,par){
+	evt = evt ? evt : window.event;
+	evt.stopPropagation();
+	var imgclass	=	$(sel).attr("class");
+	if( imgclass == 'open' ){
+		$(sel).removeClass("open").addClass("close").attr("src","__HOME__/Images/close.jpg");
+		$(par+"~ ul").slideDown();
+	}else{
+		$(sel).removeClass("close").addClass("open").attr("src","__HOME__/Images/add.png");
+		$(par+"~ ul").slideUp();
+	}
+}
+</script>
+</head>
+<body>
+<div id="body_wrapper">
+	<div id="page">
+		<div class="page_left">
+			<img  src="__HOME__/Images/left_ornament.png">
+		</div>
+		<!-- end page_left -->
+		
+		<div class="page_right">
+			<img  src="__HOME__/Images/right_ornament.png">
+		</div>
+		<!-- end page_right -->
+		
+		<div class="page_content">
+			<div class='header'>
+				<div class='logo'>
+					Andy
+				</div>
+				<div class='clear'></div>
+				<ul class="nav">
+					<li class="leaf"><a href="{:U('Index/index')}">记录</a></li>
+					<li class="leaf"><a href="{:U('Index/photo')}">相册</a></li>
+					<li class="first"><a href="{:U('Index/profile')}">个人资料</a></li>
+					<li class="leaf"><a href="{:U('Index/contact')}">联系我</a></li>
+				</ul>
+			</div>
+			<!-- end header -->
+		
+			<div class="main">
+				<div class="profile_top">
+					<div class="profile_info">
+						<img src="__PUBLIC__/Uploads/face.png" class="profile_face" width=120 height=110/>
+						<a href="{:U('Index/index')}" class="profile_name">AndyShaw</a>
+						<span class='profile_motto'>The minute you think of giving up, think of the reason why you held on so long.</span>
+						<div class="profile_share">
+							<a href="http://weibo.com/xiaozhe339?wvr=4&lf=reg" target="_blank" class="jiathis jiathis_sina"></a>
+							<a href="http://user.qzone.qq.com/37644681/infocenter" target="_blank" class="jiathis jiathis_qqzone"></a>
+							<a href="http://www.renren.com/268156679" target="_blank" class="jiathis jiathis_renren"></a>
+							<a href="mailto:zhexiao@163.com" target="_blank" class="jiathis jiathis_mail"></a>
+						</div>
+					</div>
+					
+					<div class="profile_oper">
+						<span class="oper_span">评价</span>
+						<a href="javascript:void(0)"><div class="oper_ico oper_prise"></div><div class="oper_word prise" rel="prise">赞赏</div><div class="oper_num prise_num">{$eva['prise']['num']}</div></a>
+						<a href="javascript:void(0)"><div class="oper_ico oper_like"></div><div class="oper_word like" rel="like">喜欢</div><div class="oper_num like_num">{$eva['like']['num']}</div></a>
+						<a href="javascript:void(0)"><div class="oper_ico oper_share"></div><!-- <div class="oper_word share" rel="share">分享</div><div class="oper_num share_num">{$eva['share']['num']}</div> --></a>
+						<span class="error_eva">请于1小时后再次进行评价，谢谢！</span>
+					</div>
+				</div>
+				<!-- end profile_top -->
+				
+				<div class="profile_bottom">
+					<div class="profile_detail">
+						AndyShaw的详细资料
+					</div>
+					<div class="detail detail_1">
+						<div class="oper_ico detail_1_icon"></div>
+						<span>个人成就</span>
+						<div class="first_title1">
+							<a href="javascript:void(0)" onclick="toggleIcon(event,'.first_title1 > img','.first_title1');">在大学和工作中的一些成就</a>
+							<img  class="open" src="__HOME__/Images/add.png" alt='展开'/>
+						</div>
+						<ul class="pro_ul pro_ul1">
+							<span class="closeul">×</span>
+							<volist name="listOpt1" id="vo1" key="k" >
+								<li>
+									<a href="javascript:void(0)">
+										{$k}.{$vo1.title}
+										 <div class="tooltip_description" style="display:none" title="{$vo1.title}">
+											<div class="tips_div">{$vo1.content}</div>
+											<br/>
+											<div class="tips_date">时间：{$vo1.datetime}</div>
+										 </div>
+									</a>
+								</li>
+							</volist>
+						</ul>
+					</div>
+					<div class="detail detail_2">
+						<div class="oper_ico detail_2_icon"></div>
+						<span>职业经历</span>
+						<div class="first_title2">
+							<a href="javascript:void(0)" onclick="toggleIcon(event,'.first_title2 > img','.first_title2');">从事IT工作的开发经历</a>
+							<img  class="open" src="__HOME__/Images/add.png" alt='展开'/>
+						</div>
+						<ul class="pro_ul pro_ul2">
+							<span class="closeul">×</span>
+							<volist name="listOpt2" id="vo2" key="k" >
+								<li>
+								<a href="javascript:void(0)">
+									{$k}.{$vo2.title}
+									<div class="tooltip_description" style="display:none" title="{$vo2.title}">
+										<div class="tips_div">{$vo2.content}</div>
+										<br/>
+										<div class="tips_date">时间：{$vo2.datetime}</div>
+									</div>
+								</a>
+								</li>
+							</volist>
+						</ul> 
+					</div>
+					<div class="detail detail_3">
+						<div class="oper_ico detail_3_icon"></div>
+						<span>擅长技能</span>
+						<div class="first_title3">
+							<a href="javascript:void(0)" onclick="toggleIcon(event,'.first_title3 > img','.first_title3');" >掌握的一些编程技术</a>
+							<img  class="open" src="__HOME__/Images/add.png" alt='展开'/>
+						</div>
+						<ul class="pro_ul pro_ul3">
+							<span class="closeul">×</span>
+							<volist name="listOpt3" id="vo3" key="k" >
+								<li>
+									<a href="javascript:void(0)">
+										{$k}.{$vo3.title}
+										<div class="tooltip_description" style="display:none" title="{$vo3.title}">
+											<div class="tips_div">{$vo3.content}</div>
+											<br/>
+											<div class="tips_date">时间：{$vo3.datetime}</div>
+									 	</div>
+									</a>
+								</li>
+							</volist>
+						</ul> 
+					</div>
+					<div class="detail detail_4">
+						<div class="oper_ico detail_4_icon"></div>
+						<span>教育经历</span>
+						<div class="first_title4">
+							<a href="javascript:void(0)" onclick="toggleIcon(event,'.first_title4 > img','.first_title4');">一些教育培训和经历</a>
+							<img  class="open" src="__HOME__/Images/add.png" alt='展开'/>
+						</div>
+						<ul class="pro_ul pro_ul4">
+							<span class="closeul">×</span>
+							<volist name="listOpt4" id="vo4" key="k" >
+								<li>
+									<a href="javascript:void(0)">
+										{$k}.{$vo4.title}
+										<div class="tooltip_description" style="display:none" title="{$vo4.title}">
+											<div class="tips_div">{$vo4.content}</div>
+											<br/>
+											<div class="tips_date">时间：{$vo4.datetime}</div>
+										</div>
+									</a>
+								</li>
+							</volist>
+						</ul> 
+					</div>
+				</div>
+			</div>
+			<!-- end main -->
+		</div>
+		<!-- end page_content -->
+	</div>
+	<div class="clear"></div>
+	
+	<include file="Public:footer" />
+	<!-- end footer -->
+</div>
+<!-- end body_wrapper -->
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".slide_img > img").first().show().siblings().hide();
+	$(".slide_index > li").hover(function(evt){
+		evt.stopPropagation();
+		var indexs = $(this).html();
+		$(this).addClass('hover_slide_index').siblings().removeClass('hover_slide_index');
+		$(".slide_img > img").eq(indexs-1).show().siblings().hide();
+	});
+});
+</script>
+</body>
+</html>

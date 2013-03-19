@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link type='text/css' rel='stylesheet' href='__HOME__/Css/index.css' >
+<script type='text/javascript' src='__HOME__/Js/jquery-1.7.min.js' ></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".username,.comment").blur(function(){
+		if( $(this).val()	==	'' ){
+			$(this).siblings('p').slideDown();
+		}else{
+			$(this).siblings('p').slideUp();
+		}
+	});
+	$(".email").blur(function(){
+		var val	=	$(this).val();
+		var re	= /^\w+[.]*\w*@\w*\.com$/;
+		if( re.test(val) ){
+			$(this).siblings('p').slideUp();
+		}else{
+			$(this).siblings('p').slideDown();
+		}
+	});
+	
+});
+</script>
+</head>
+<body>
+<div id="body_wrapper">
+	<div id="page">
+		<div class="page_left">
+			<img  src="__HOME__/Images/left_ornament.png">
+		</div>
+		<!-- end page_left -->
+		
+		<div class="page_right">
+			<img  src="__HOME__/Images/right_ornament.png">
+		</div>
+		<!-- end page_right -->
+		
+		<div class="page_content">
+			<div class='header'>
+				<div class='logo'>
+					Andy
+				</div>
+				<div class='clear'></div>
+				<ul class="nav">
+					<li class="leaf"><a href="{:U('Index/index')}">记录</a></li>
+					<li class="leaf"><a href="{:U('Index/photo')}">相册</a></li>
+					<li class="leaf"><a href="{:U('Index/profile')}">个人资料</a></li>
+					<li class="first"><a href="{:U('Index/contact')}">联系我</a></li>
+				</ul>
+			</div>
+			<!-- end header -->
+		
+			<div class="main">
+				<div class="con_title">
+					<div class="con_icon"></div>
+					Contact Me
+				</div>
+				<div class="con_left">
+					<div class="col1">
+						<div class="col_title">Through QQ</div>
+						<div class="col_content">QQ Num:<a href="tencent://message/?uin={$list.qq.value}&amp;Site=Andy&amp;Menu=yes">{$list.qq.value}</a></div>
+					</div>
+					<div class="col1">
+						<div class="col_title">Through Skype</div>
+						<div class="col_content">Username:<a href="callto://{$list.skype.value}">{$list.skype.value}</a></div>
+					</div>
+					<div class="col1">
+						<div class="col_title">Through Email</div>
+						<div class="col_content">Mail:<a href="mailto:{$list.email.value}">{$list.email.value}</a></div>
+					</div>
+					<div class="col1">
+						<div class="col_title">Through MSN</div>
+						<div class="col_content">MSN:<br/><a href="msnim:chat?contact={$list.msn.value}">{$list.msn.value}</a></div>
+					</div>
+				</div>
+				<!-- end con_left -->
+				<div class="con_right">
+					<form action="__APP__/Index/commentme" method="post">
+						<div class="form_div">
+							<span class="form_span">Username:</span>
+							<input type="text" name="username" value="" class="form_input username" />
+							<p>请输入用户名</p>
+						</div>
+						<div class="form_div">
+							<span class="form_span">Your Mail:</span>
+							<input type="text" name="email" value="" class="form_input email" />
+							<p>请输入正确的电子邮件</p>
+						</div>
+						<div class="form_div">
+							<span class="form_span textarea_span">Comment:</span>
+							<textarea name="comment" class="form_textarea comment"></textarea>
+							<p>请输入字符</p>
+						</div>
+						<div class="form_div sub_div">
+							<input type="submit" value="Comment" name="sub" class="form_sub" />
+						</div>
+					</form>
+				</div>
+				<!-- end con_right -->
+			</div>
+			<!-- end main -->
+		</div>
+		<!-- end page_content -->
+	</div>
+	<div class="clear"></div>
+	
+	<include file="Public:footer" />
+	<!-- end footer -->
+</div>
+<!-- end body_wrapper -->
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".slide_img > img").first().show().siblings().hide();
+	$(".slide_index > li").hover(function(evt){
+		evt.stopPropagation();
+		var indexs = $(this).html();
+		$(this).addClass('hover_slide_index').siblings().removeClass('hover_slide_index');
+		$(".slide_img > img").eq(indexs-1).show().siblings().hide();
+	});
+});
+</script>
+</body>
+</html>

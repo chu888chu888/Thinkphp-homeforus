@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link type='text/css' rel='stylesheet' href='__HOME__/Css/index.css' >
+<script type='text/javascript' src='__HOME__/Js/jquery-1.7.min.js' ></script>
+<script type='text/javascript' src='__HOME__/Js/jquery.isotope.min.js' ></script>
+<script type='text/javascript' src='__HOME__/Js/jquery.infinitescroll.js' ></script>
+<script type="text/javascript" src="__ADMIN__/Js/UIDialog.js"></script>
+<style type="text/css">
+#water_page{ width:720px;  margin:0 auto; }
+#water_main{border-radius:10px;background:#FFF;min-height:590px;width:710px;padding:10px 0px;}
+.water_item{border:1px solid #EEE;float:left;display:inline;padding:10px;margin: 10px 0px 0 10px;position: relative;}
+.water_item img{border: none;}
+#infscr-loading{position:absolute;bottom:10px;left:250px;}
+.ui-dialog{min-width:300px;min-height:300px;position:absolute;max-width:850px;height:auto;background:#fff;z-index:99999;border:5px solid #767576;}
+</style>
+<script type="text/javascript">
+$(document).ready(function(){
+	//自动加载瀑布流
+	$(function(){
+		var $container = $('#water_main');
+		$container.isotope({
+		  itemSelector : '.water_item'
+		});
+	    
+		$container.infinitescroll({
+			navSelector  	: '#next',    // selector for the paged navigation 
+			nextSelector 	: '#next a',  // selector for the NEXT link (to page 2)
+			itemSelector 	: '.water_item',     // selector for all items you'll retrieve
+			loading			:{
+				finished : function(){
+					$("#infscr-loading").fadeOut('slow');
+					//$(".water_item > img").animate({height: '200'},'slow');
+				},
+				img : "__HOME__/Images/loading.gif",
+				finishedMsg : "<em>图片加载完成.</em>",
+				msgText : "<em>加载中...</em>",
+			},
+		},
+		// call Isotope as a callback，newElements代表的是新加入的元素
+		function( newElements ) {
+			$container.isotope( 'appended', $( newElements ) ); 
+		});
+	});
+
+	//弹出层,live即使是后面append进来的数据也可以绑定方法
+	$(".water_item > img").live('click',function(){
+		$.UIDialog({
+			title	:	'图片预览',
+	   		content	:	"<img src="+$(this).attr('src')+" />"
+	  	})
+  		//替换关闭文字为图片
+  		$(".ui-close").html("<img src='__ADMIN__/Images/close.png' />");
+	});
+});
+</script>
+</head>
+<body>
+<div id="body_wrapper">
+	<div id="page">
+		<div class="page_left">
+			<img  src="__HOME__/Images/left_ornament.png">
+		</div>
+		<!-- end page_left -->
+		
+		<div class="page_right">
+			<img  src="__HOME__/Images/right_ornament.png">
+		</div>
+		<!-- end page_right -->
+		
+		<div class="page_content">
+			<div class='header'>
+				<div class='logo'>
+					Andy
+				</div>
+				<div class='clear'></div>
+				<ul class="nav">
+					<li class="leaf"><a href="{:U('Index/index')}">记录</a></li>
+					<li class="first"><a href="{:U('Index/photo')}">相册</a></li>
+					<li class="leaf"><a href="{:U('Index/profile')}">个人资料</a></li>
+					<li class="leaf"><a href="{:U('Index/contact')}">联系我</a></li>
+				</ul>
+			</div>
+		
+			<div class="main">
+			  <div id="water_main">
+			    <volist name="list" id="vo">
+			   		<div class="water_item">
+				      <img src="__PUBLIC__/Uploads/{$vo.filename}" width=200 height=210 style="cursor:pointer;"/>
+			   		</div>
+			    </volist>
+			  </div>
+			</div>
+		  	<div  id="next">
+		  		<a href="__APP__/Index/photo/p/2"></a>
+		 	 </div>
+		</div>
+	</div>
+	<!-- end #page -->
+
+	<div class="clear"></div>
+	<include file="Public:footer" />
+	<!-- end footer -->
+</div>
+</body>
+</html>

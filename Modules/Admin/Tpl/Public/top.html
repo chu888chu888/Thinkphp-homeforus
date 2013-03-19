@@ -1,0 +1,77 @@
+<style type="text/css">
+/*如果新增一个头部导航，需要在这里添加为relative*/
+.Normal,.Text,.Photo{position:relative;}
+</style>
+<div id="manage_header">
+	<ul class="top_left">
+		<li class="Manage">
+			<a href="{:U('Admin/Manage/index')}">管理首页</a>
+		</li>
+		<li class="Text">
+			文本管理
+			<span class="arrow">&nbsp;</span>
+			<ul class="children_ul">
+				<li><a href="{:U('Admin/Text/story')}">故事管理</a></li>
+				<li><a href="{:U('Admin/Text/profile')}">个人资料</a></li>
+				<li><a href="{:U('Admin/Text/contact')}">联系我</a></li>
+				<li><a href="{:U('Admin/Text/comment')}">查看评论</a></li>
+			</ul>
+		</li>
+		<li class="Photo">
+			图片管理
+			<span class="arrow">&nbsp;</span>
+			<ul class="children_ul">
+				<li><a href="{:U('Admin/Photo/index')}">相册管理</a></li>
+			</ul>
+		</li>
+		<li class="Normal">
+			常规设置
+			<span class="arrow">&nbsp;</span>
+			<ul class="children_ul">
+				<li><a href="{:U('Admin/Normal/frontconf')}">前台设置</a></li>
+				<li><a href="{:U('Admin/Normal/backendconf')}">后台设置</a></li>
+				<li><a href="{:U('Admin/Normal/clearCache')}">清除缓存</a></li>
+			</ul>
+		</li>
+		<li class="wzqt">
+			<a href="{:U('Home/Index/index')}" target="_blank">网站前台</a>
+		</li>
+	</ul>
+	<!-- end top_left -->
+	<ul class="top_right">
+		<li class="Logout">
+			欢迎管理员{$Think.session.username}
+			<span class="arrow">&nbsp;</span>
+			<ul class="Logout_ul">
+				<li><a href="{:U('Admin/Index/logout')}">登出</a></li>
+			</ul>
+		</li>
+	</ul>
+	<!-- end top_right -->
+</div>
+
+<!-- modlue_name 是我在commonAction里面传输过来的MODULE_NAME -->
+<input type="hidden" value="{$module_name}" class="module" />
+<script type="text/javascript">
+$(document).ready(function(){
+	//get the browser url 
+	var fullurl	=	window.location.href;
+	//get current Module Name
+	var moduleName	=	$(".module").val();
+	if( fullurl.indexOf(moduleName) ){
+		$("."+moduleName).css({background:"white",color:"#000"});
+		$("."+moduleName).children().css({color:"#000"});
+		$("."+moduleName).children("span").addClass("arrow_click");
+	}
+	
+	//如果新增加一个头部导航，则需要在这里绑定一个事件
+	$(".Logout,.Text,.Normal,.Photo").hover(
+			function(){
+				$(this).children("ul").slideDown();
+			},
+			function(){
+				$(this).children("ul").hide();
+			}
+		);
+});
+</script>

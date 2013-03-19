@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$Think.config.WEB_TITLE}</title>
+<link style="text/css" rel="stylesheet" href="__ADMIN__/Css/index.css">
+<script type="text/javascript" src="__ADMIN__/Js/jquery.min.js"></script>
+<link rel="stylesheet" href="__ROOT__/Editor/themes/default/default.css" />
+<script type="text/javascript" src="__ROOT__/Editor/kindeditor-min.js"></script>
+<script type="text/javascript" src="__ROOT__/Editor/lang/zh_CN.js"></script>
+<script type="text/javascript" src="__ADMIN__/Js/editor.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	//Tab切换功能
+	$("#tabs > a").click(function(){
+		$(this).addClass('selected').siblings().removeClass('selected');
+		var attr	=	$(this).attr("rel");
+		$("."+attr).show().siblings().hide();
+	});
+	
+	//重新上传图片效果
+	$(".reupload").click(function(){
+		var re= $("input[name='reupload']").attr("checked");
+		if( re == 'checked' ){
+			$(".refile").show();
+		}else{
+			$(".refile").hide();
+		}
+	});
+});
+</script>
+</head>
+<body>
+<div id="wrap_body">
+	<!-- 包含公用头部 -->
+	<include file="Public:top" />
+
+	<div class="ma_content">
+		<div class="breadcrumb">
+        	<a href="{:U('Admin/Photo/index')}">首页</a>
+    	</div>
+    	<div class="box">
+    		<div class="heading">
+      			<h1><img alt="" src="__ADMIN__/Images/photo.png">编辑图片</h1>
+      			<ul class="heading_ul">
+      				<a class="save button">保存</a>
+      				<a class="button" onclick="window.history.go(-1)">取消</a>
+      			</ul>
+   		 	</div>
+   		 	<div class="box_content">
+ 		 		<div class="htabs" id="tabs">
+		 		 	<a class="selected" rel="showcontent">图片内容</a>
+		 		 	<a rel="showoptions">上传图片</a>
+		 		</div>	
+	 		 	<div class="clear"></div>
+	 		 	<form action="__URL__/finish_edit_photo" method="post" id="form" enctype="multipart/form-data">
+	 		 		<div class="showcontent">
+						<div class="box_form_div">
+							<span class="box_form_span">标题:</span>
+							<input type="text" class="box_form_input" value="{$list.title}" name="title">
+						</div>
+						<div class="box_form_div">
+							<span class="box_form_span">内容:</span>
+							<textarea id="editor_id" name="content">{$list.content}</textarea>
+						</div>
+	 		 		</div>
+	 		 		<!-- end showcontent -->
+	 		 		
+	 		 		<div class="showoptions" style="display:none;">
+	 		 			<div class="box_form_div">
+							<span class="box_form_span">重新上传图片:</span>
+							<input type="checkbox" name="reupload" value="1" class="reupload" />
+							<input type="file" value="" name="file" class="refile" style="display:none;"/> 
+						</div>
+	 		 			<div class="box_form_div">
+							<span class="box_form_span">显示:</span>
+							<span>是</span>:<input type="radio"  value="1" name="active" <eq name="list.active" value="1">checked="checked"</eq> >
+							<span>否</span>:<input type="radio"  value="0" name="active" <eq name="list.active" value="0">checked="checked"</eq> >
+						</div>
+						<div class="box_form_div">
+							<span class="box_form_span">创建日期:</span>
+							<input type="text" class="box_form_input" value="{$list.datetime}" name="datetime">
+						</div>
+	 		 		</div>
+	 		 		<!-- end showoptions -->
+	 		 		<input type="hidden" value="{$list.filename}" name="filename" />
+	 		 		<input type="hidden" value="{$list._id}" name="_id" />
+	 		 	</form>
+   		 	</div>
+    	</div>
+	</div>
+	<!-- end ma_content -->
+	
+	<!-- 包含公用尾部 -->
+	<include file="Public:footer" />
+</div>
+</body>
+</html>
